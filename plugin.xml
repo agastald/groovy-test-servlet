@@ -1,0 +1,11 @@
+<plugin name='groovy-test-servlet' version='0.2' grailsVersion='2.4 &gt; *'>
+  <author>Your name</author>
+  <title>Groovy Test Servlet Plugin</title>
+  <description>Brief summary/description of the plugin.
+</description>
+  <documentation>http://grails.org/plugin/groovy-test-servlet</documentation>
+  <type>GroovyTestServletGrailsPlugin</type>
+  <resources>
+    <resource>groovy.test.servlet.EvalController</resource>
+  </resources>
+</plugin>
