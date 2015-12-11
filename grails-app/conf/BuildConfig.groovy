@@ -46,3 +46,8 @@ grails.project.dependency.resolution = {
         }
     }
 }
+
+grails.project.repos.default = 'picapau'
+grails.project.repos.picapau.url = "http://picapau/nexus/content/repositories/releases"
+grails.project.repos.picapau.username = "deployment"
+grails.project.repos.picapau.password = "deployment123"
