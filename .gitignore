@@ -1,38 +1,8 @@
-.*
-!.gitignore
-
-#
-# java
-#
-*.class
-target/
-bin/
-build/
-log/
-src/main/webapp/WEB-INF/classes/
-*.jar
-*.war
-*.zip
+*.log
 *.sha1
-src/main/webapp/WEB-INF/lib/
-*Ignored.java
-*.urlencoded
-
-#
-# execucao em *nix
-#
-nohup.out*
-*.pid
-
-#
-# git merge conflict backup files.
-#
-*.orig
-
-#
-# arquivos log sao resultados de execucoes
-#
-*.log*
-tomcat
-
-*.iml
+*.zip
+.classpath
+.project
+.settings
+plugin.xml
+target
