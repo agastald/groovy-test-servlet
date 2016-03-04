@@ -21,7 +21,7 @@ ${result}
 </g:if>
 
 <h2>Script</h2>
-<form method="POST" action="eval">
+<form method="POST" action="">
 <TEXTAREA name="groovy.script" rows="10" cols="80">
 ${params.'groovy.script'}
 </TEXTAREA>

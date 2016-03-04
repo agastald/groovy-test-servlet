@@ -32,4 +32,26 @@ class EvalController {
         }
     }
 
+    def status() {
+        def rtBean = java.lang.management.ManagementFactory.getRuntimeMXBean()
+        def memBean = java.lang.management.ManagementFactory.getMemoryMXBean()
+        def heap = (memBean.getHeapMemoryUsage().getCommitted() / 1048576).toInteger()
+        def nonHeap = (memBean.getNonHeapMemoryUsage().getCommitted() / 1048576).toInteger()
+        def map = [
+          localhost: InetAddress.getLocalHost(),
+          environment: grails.util.Environment.current.name,
+          startupTime: new Date(rtBean.startTime).format('yy/MM/dd HH:mm:ss'),
+          currentTime: new Date().format('yy/MM/dd HH:mm:ss'),
+          duration: groovy.time.TimeCategory.minus(new Date(), new Date(rtBean.startTime)).toString(),
+          groovy: GroovySystem.version,
+          java: Runtime.package.implementationVersion,
+          grails: grailsApplication.metadata.sort(),
+          memory: [heap: heap, nonHeap: nonHeap, total: (heap + nonHeap)],
+          encoding: [defaultCharset: java.nio.charset.Charset.defaultCharset.toString(), 'file.encoding': System.getProperty('file.encoding')],
+          os: System.getProperties().findAll { it.key ==~ /^os\..*/ }.sort(),
+          arguments: rtBean.inputArguments,
+        ]
+        [map:map]
+    }
+
 }
