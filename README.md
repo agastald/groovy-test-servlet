@@ -2,7 +2,7 @@
 
 Based on the same [servlet implementation](http://beanshell.org/manual/bshmanual.html#BshServlet_and_Servlet_Mode_Scripting) used by [BeanShell](http://beanshell.org)
 
-![beanshell-servet-page](beanshell-servet-page.png)
+![beanshell-servet-page](beanshell-servlet-page.png)
 
 Adds a servlet as **/eval** for running arbitrary code on the server.
 
