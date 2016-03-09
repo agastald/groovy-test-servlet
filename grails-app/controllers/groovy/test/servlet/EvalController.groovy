@@ -7,10 +7,10 @@ class EvalController {
             def baos = new ByteArrayOutputStream()
             def printStream = new PrintStream(baos)
             Binding binding = new Binding()
-            binding.setProperty("out", printStream)
-            binding.setProperty("req", request)
-            binding.setProperty("res", response)
-            binding.setProperty("grailsApplication", grailsApplication)
+            binding.setProperty('out', printStream)
+            binding.setProperty('req', request)
+            binding.setProperty('res', response)
+            binding.setProperty('grailsApplication', grailsApplication)
             GroovyShell shell = new GroovyShell(binding)
             def result
             try {
@@ -50,6 +50,7 @@ class EvalController {
           encoding: [defaultCharset: java.nio.charset.Charset.defaultCharset.toString(), 'file.encoding': System.getProperty('file.encoding')],
           os: System.getProperties().findAll { it.key ==~ /^os\..*/ }.sort(),
           arguments: rtBean.inputArguments,
+          pid: java.lang.management.ManagementFactory.getRuntimeMXBean().getName().split("@")[0],
         ]
         [map:map]
     }
