@@ -1,5 +1,5 @@
 class GroovyTestServletGrailsPlugin {
-    def version = '0.7'
+    def version = '0.8'
     def grailsVersion = '2.5 > *'
     def title = 'Groovy Test Servlet Plugin'
     def author = 'Alessandro Gastaldi'
@@ -9,6 +9,4 @@ class GroovyTestServletGrailsPlugin {
     def license = 'APACHE'
     def issueManagement = [url: 'https://github.com/agastald/groovy-test-servlet/issues']
     def scm = [url: 'https://github.com/agastald/groovy-test-servlet']
-    // def environments = [excludes: ['prod']]
-    // def scopes = [excludes:'war']
 }
