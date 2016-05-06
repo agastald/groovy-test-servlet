@@ -1,0 +1,7 @@
+name: agastald/groovy-test-servlet
+author:
+  name: Alessandro Gastaldi
+  email: alessandro.gastaldi@gmail.com
+  url: null
+copyright: 2015 Alessandro Gastaldi
+description: Servlet for running arbitrary groovy code on the server
