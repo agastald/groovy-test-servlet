@@ -6,8 +6,8 @@ function keyDown(event) {
     if (key == null) {
         return false;
     }
-    if (key == 13 && (event.ctrlKey || event.metaKey)) {
-        // ctrl + return, cmd + return
+    if (key == 13 && event.shiftKey) {
+        // shift + return
         event.target.parentElement.submit();
         return false;
     }

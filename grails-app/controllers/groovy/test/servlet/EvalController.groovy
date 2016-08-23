@@ -23,7 +23,7 @@ class EvalController {
             def result
             try {
                 result = shell.evaluate(params.groovy.script)
-                params.'groovy.script' = params.'groovy.script'[0..-2]
+                params.'groovy.script' = params.'groovy.script'.trim()
             } catch (t) {
                 if (params.'groovy.servlet.captureOutErr' == 'true') {
                     t.printStackTrace(printStream)
