@@ -19,7 +19,7 @@ class EvalController {
             binding.setProperty('req', request)
             binding.setProperty('res', response)
             binding.setProperty('grailsApplication', grailsApplication)
-            GroovyShell shell = new GroovyShell(binding)
+            GroovyShell shell = new GroovyShell(grailsApplication.classLoader,binding)
             def result
             try {
                 result = shell.evaluate(params.groovy.script)

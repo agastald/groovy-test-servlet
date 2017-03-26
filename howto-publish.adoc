@@ -1,0 +1,36 @@
+# Publicar plugin do grails
+
+## Configurar repositório
+
+Certifique-se de que o repositório esteja devidamente configurado, seja por projeto:
+
+.BuildConfig.groovy
+```groovy
+grails.project.dependency.distribution = {
+    remoteRepository(id: 'airon', url: 'http://aironbrasil.com.br/nexus/content/repositories/releases') {
+        authentication username: 'deployment', password: 'deployment123'
+    }
+}
+```
+
+ou 'system-wide':
+
+.$HOME/.grails/settings.groovy
+```groovy
+grails.project.repos.default = 'airon'
+// grails.project.repos.grailsCentral.username = 'agastald'
+// grails.project.repos.grailsCentral.password = '******'
+grails.project.dependency.distribution = {
+    remoteRepository(id: 'airon', url: 'http://aironbrasil.com.br/nexus/content/repositories/releases') {
+        authentication username: 'deployment', password: 'deployment123'
+    }
+}
+```
+
+## Execução
+
+Rodar os comandos:
+
+```bash
+grails clean-all && grails package-plugin && grails publish-plugin
+```

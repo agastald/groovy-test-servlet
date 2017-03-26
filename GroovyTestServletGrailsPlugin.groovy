@@ -1,5 +1,5 @@
 class GroovyTestServletGrailsPlugin {
-    def version = '0.10'
+    def version = '0.11'
     def grailsVersion = '2.5 > *'
     def title = 'Groovy Test Servlet Plugin'
     def author = 'Alessandro Gastaldi'
