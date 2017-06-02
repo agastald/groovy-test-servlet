@@ -68,4 +68,12 @@ class EvalController {
         [map:map]
     }
 
+    def raw() {
+        response.contentType = 'text/plain'
+        response.characterEncoding = request.characterEncoding
+        def content = request.inputStream?.text ?: request.queryString
+        if (!content) content = request.dump()
+        render "${request.method} ${content.size()}/${request.contentLength} ${request.contentType}\n${content}\n"
+    }
+
 }
