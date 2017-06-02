@@ -76,4 +76,16 @@ class EvalController {
         render "${request.method} ${content.size()}/${request.contentLength} ${request.contentType}\n${content}\n"
     }
 
+    def headers() {
+        response.contentType = 'text/plain'
+        response.characterEncoding = request.characterEncoding
+        def headers = request.headerNames.toList().sort().collectEntries { name ->
+            [name, request.getHeaders(name).toList().join(',')]
+        }
+        def max = headers.keySet().max { it.size() }.size()
+        render headers.collect { k, v ->
+            "${k.padLeft(max)} : $v"
+        }.join('\n') + '\n'
+    }
+
 }
