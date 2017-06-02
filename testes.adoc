@@ -1,3 +1,12 @@
+.Para rodar
+```bash
+git apply 0001-files-for_run-app.patch
+grails -reloading run-app
+```
+
+.Testes
+```bash
 curl http://localhost:8080/groovy-test-servlet/eval/raw -d @input.json -H "Content-Type: application/json; charset=UTF-8"
 
 curl http://localhost:8080/groovy-test-servlet/eval/headers -d @input.json -H "Content-Type: application/json; charset=UTF-8"
+```

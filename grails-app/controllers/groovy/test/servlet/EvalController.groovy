@@ -73,7 +73,9 @@ class EvalController {
         response.characterEncoding = request.characterEncoding
         def content = request.inputStream?.text ?: request.queryString
         if (!content) content = request.dump()
-        render "${request.method} ${content.size()}/${request.contentLength} ${request.contentType}\n${content}\n"
+        def str = "${request.method} ${content.size()}/${request.contentLength} ${request.contentType}\n${content}\n"
+        print "${'-'*80}\n$str${'-'*80}\n"
+        render str
     }
 
     def headers() {
@@ -83,9 +85,11 @@ class EvalController {
             [name, request.getHeaders(name).toList().join(',')]
         }
         def max = headers.keySet().max { it.size() }.size()
-        render headers.collect { k, v ->
+        def str = headers.collect { k, v ->
             "${k.padLeft(max)} : $v"
         }.join('\n') + '\n'
+        print "${'='*80}\n$str${'='*80}\n"
+        render str
     }
 
 }
