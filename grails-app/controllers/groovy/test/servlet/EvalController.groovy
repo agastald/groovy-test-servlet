@@ -4,10 +4,12 @@ class EvalController {
 
     private restraintProductionAccess() {
         if (grails.util.Environment.current == grails.util.Environment.PRODUCTION
-                && request.getHeader('x-access-word') != grailsApplication.config.testPassword) {
+                && request.getHeader('x-access-word') != grailsApplication.config.eval.testPassword) {
             response.sendError(404)
         }
     }
+
+
 
     def index() {
         restraintProductionAccess()
@@ -18,6 +20,7 @@ class EvalController {
             binding.setProperty('out', printStream)
             binding.setProperty('req', request)
             binding.setProperty('res', response)
+            binding.setProperty('controller', this)
             binding.setProperty('grailsApplication', grailsApplication)
             GroovyShell shell = new GroovyShell(grailsApplication.classLoader,binding)
             def result
@@ -41,6 +44,8 @@ class EvalController {
             params.'groovy.servlet.captureOutErr' = 'true'
         }
     }
+
+
 
     def status() {
         restraintProductionAccess()
@@ -68,7 +73,7 @@ class EvalController {
         [map:map]
     }
 
-    def raw() {
+    def plain() {
         response.contentType = 'text/plain'
         response.characterEncoding = request.characterEncoding
         def content = request.inputStream?.text ?: request.queryString
@@ -90,6 +95,11 @@ class EvalController {
         }.join('\n') + '\n'
         print "${'='*80}\n$str${'='*80}\n"
         render str
+    }
+
+    private withController(Closure closure) {
+        closure.delegate = this
+        closure()
     }
 
 }
