@@ -18,10 +18,11 @@ class EvalController {
             def printStream = new PrintStream(baos)
             Binding binding = new Binding()
             binding.setProperty('out', printStream)
-            binding.setProperty('req', request)
-            binding.setProperty('res', response)
+            binding.setProperty('request', request)
+            binding.setProperty('response', response)
             binding.setProperty('controller', this)
             binding.setProperty('grailsApplication', grailsApplication)
+            binding.setProperty('ga', grailsApplication)
             GroovyShell shell = new GroovyShell(grailsApplication.classLoader,binding)
             def result
             try {
@@ -35,6 +36,7 @@ class EvalController {
                 }
             }
             if (params.'groovy.servlet.output' == 'raw') {
+                response.contentType = 'text/plain; charset=utf-8'
                 render baos.toString()
                 return
             }
@@ -42,10 +44,9 @@ class EvalController {
         } else {
             params.'groovy.script' = 'println "hello!"'
             params.'groovy.servlet.captureOutErr' = 'true'
+            [:]
         }
     }
-
-
 
     def status() {
         restraintProductionAccess()
