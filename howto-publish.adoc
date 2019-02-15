@@ -27,6 +27,12 @@ grails.project.dependency.distribution = {
 }
 ```
 
+
+## Versão
+
+Mudar a versão em GroovyTestServletGrailsPlugin
+
+
 ## Execução
 
 Rodar os comandos:

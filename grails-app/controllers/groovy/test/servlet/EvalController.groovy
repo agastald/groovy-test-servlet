@@ -37,7 +37,11 @@ class EvalController {
             }
             if (params.'groovy.servlet.output' == 'raw') {
                 response.contentType = 'text/plain; charset=utf-8'
-                render baos.toString()
+                String streamResult = baos.toString().trim()
+                String output
+                if (streamResult && result) output = "$streamResult\n$result"
+                else output = streamResult ?: result
+                render output ?: ''
                 return
             }
             [output: baos.toString(), result: result, evaluate: true]
