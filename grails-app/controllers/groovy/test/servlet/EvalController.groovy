@@ -9,7 +9,30 @@ class EvalController {
         }
     }
 
+    static String libUrl = calcLibUrl()
 
+    String lastInclude
+
+    private String importLib() {
+        if (params.'groovy.servlet.lib') {
+            try {
+                UrlFile urlFile = new UrlFile(libUrl,'/tmp/odl/dkl/xpt')
+                String baseScript = lastInclude ? urlFile.remoteText : urlFile.text
+                if (baseScript) {
+                    def baseClass = grailsApplication.classLoader.parseClass baseScript
+                    lastInclude = "@groovy.transform.BaseScript ${baseClass.name} _mainScript;"
+                } else if (lastInclude) {
+                    lastInclude
+                } else {
+                    "println(':: LIB NOT FOUND: $libUrl'); return;"
+                }
+            } catch (Throwable t) {
+                "println(''':: LIB ERROR:\n$t\n'''); return;"
+            }
+        } else {
+            ''
+        }
+    }
 
     def index() {
         restraintProductionAccess()
@@ -20,22 +43,26 @@ class EvalController {
             binding.setProperty('out', printStream)
             binding.setProperty('request', request)
             binding.setProperty('response', response)
+            binding.setProperty('log', log)
             binding.setProperty('controller', this)
             binding.setProperty('grailsApplication', grailsApplication)
             binding.setProperty('ga', grailsApplication)
+            String include = importLib()
             GroovyShell shell = new GroovyShell(grailsApplication.classLoader,binding)
             def result
             try {
-                result = shell.evaluate(params.groovy.script)
+                result = shell.evaluate(include + params.groovy.script)
                 params.'groovy.script' = params.'groovy.script'.trim()
-            } catch (t) {
+            } catch (org.codehaus.groovy.control.MultipleCompilationErrorsException cex) {
+                result = cex.toString()
+            } catch (Throwable t) {
                 if (params.'groovy.servlet.captureOutErr' == 'true') {
                     t.printStackTrace(printStream)
                 } else {
                     throw t
                 }
             }
-            if (params.'groovy.servlet.output' == 'raw') {
+            // if (params.'groovy.servlet.output' == 'raw') {
                 response.contentType = 'text/plain; charset=utf-8'
                 String streamResult = baos.toString().trim()
                 String output
@@ -43,7 +70,7 @@ class EvalController {
                 else output = streamResult ?: result
                 render output ?: ''
                 return
-            }
+            // }
             [output: baos.toString(), result: result, evaluate: true]
         } else {
             params.'groovy.script' = 'println "hello!"'
@@ -107,4 +134,48 @@ class EvalController {
         closure()
     }
 
+    static String calcLibUrl() {
+        if (InetAddress.localHost.hostName =~ 'macale.local|notale|localhost') {
+            return 'http://127.0.0.1:7080/ale.gtp'
+        }
+        libMap[InetAddress.localHost.hostAddress] ?: 'http://aironbrasil.com.br/ale.gtp'
+    }
+
+    static Map getLibMap() {
+        EvalController.getResource('/lib_location.txt').readLines()*.split(' +').collectEntries {
+            [it[0], it[1]]
+        }
+    }
+}
+
+
+class UrlFile {
+    static final GMT = TimeZone.getTimeZone('GMT')
+    static final MODIFIED_PATTERN = 'EEE, dd MMM yyyy HH:mm:ss z'
+    static String ifModifiedSince(Date d) { d.format(MODIFIED_PATTERN,GMT) }
+    static Date parseLastModified(String s) { Date.parse(MODIFIED_PATTERN,s,GMT) }
+    //
+    final URL url
+    final File dir
+    final File localFile
+    UrlFile(String url, String dir) {
+        this.url = url.toURL()
+        this.dir = new File(dir)
+        this.dir.mkdirs()
+        this.localFile = new File(this.dir,this.url.file)
+    }
+    String getText() {
+        localFile.exists() ? localFile.text : remoteText
+    }
+    String getRemoteText() {
+        HttpURLConnection conn = url.openConnection()
+        conn.setRequestProperty 'If-Modified-Since', ifModifiedSince(new Date(localFile.lastModified()))
+        conn.requestMethod = 'GET'
+        if (conn.responseCode == 200) {
+            String content = conn.inputStream.text
+            localFile.write content
+            localFile.lastModified = parseLastModified(conn.getHeaderField('Last-Modified')).time
+            content
+        }
+    }
 }

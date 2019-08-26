@@ -1,54 +1,50 @@
 <html>
-<head><title>Groovy Test Servlet</title></head>
+<head>
+    <title>Eval Servlet</title>
+    <style type="text/css">
+        #td_submit { height: 1px; }
+        #tr_script { height: 1px; }
+        #td_options { width: 1px; white-space: nowrap; }
+    </style>
 <script type="text/javascript">
 function keyDown(event) {
-    var key=event.keyCode? event.keyCode : event.charCode;
+    var key = event.keyCode? event.keyCode : event.charCode;
     if (key == null) {
         return false;
     }
+    // shift + return
     if (key == 13 && event.shiftKey) {
-        // shift + return
-        event.target.parentElement.submit();
+        event.target.form.submit();
         return false;
     }
 }
 function doFocus() {
-    document.getElementById("groovy.script").focus();
+    var textarea = document.getElementById("groovy.script");
+    textarea.focus();
+    textarea.setSelectionRange(textarea.textLength,textarea.textLength);
 }
 </script>
-<body onload="doFocus();">
+</head>
+<body onload='doFocus()'>
 
-<h1 style='color:blue;'>Groovy Test Servlet</h1>
-Groovy version: ${GroovySystem.version}
-
-<g:if test="${evaluate}">
-<h2>Script Output</h2>
-<table width="80%" border="1" cellpadding="6"><tr><td bgcolor="#eeeeee">
-<pre>
-${output}
-</pre>
-</td></tr></table>
-
-<h2>Script Return Value</h2>
-<pre>
-${result}
-</pre>
-</p>
-</g:if>
-
-<h2>Script</h2>
-<form method="POST" action="">
-<TEXTAREA id="groovy.script" name="groovy.script" rows="10" cols="80" onkeydown="return keyDown(event)">
-${params.'groovy.script'}
+<form method="POST" target="result">
+<table id="main" width="100%" height="100%" border="0">
+<tr id="tr_script" valign="top"><td rowspan="2">
+<TEXTAREA id="groovy.script" name="groovy.script" rows="10" cols="80" style="width:100%;" onkeydown="return keyDown(event)" tabindex="1">
 </TEXTAREA>
-<p>
-Capture Stdout/Stderr:
-<INPUT type="checkbox" name="groovy.servlet.captureOutErr" value="true" <g:if test="${params.'groovy.servlet.captureOutErr'}">checked</g:if>>
-Display Raw Output:
-<INPUT type="checkbox" name="groovy.servlet.output" value="raw" <g:if test="${params.'groovy.servlet.output'}">checked</g:if>>
-<p>
-<INPUT type="submit" value="Evaluate">
+</td><td id='td_options'>
+<div style='color:blue;'>Groovy version: <b>${GroovySystem.version}</b></div>
+<INPUT type="checkbox" tabindex="3" name="groovy.servlet.captureOutErr" checked value="true"> Capture Stdout/Stderr<br>
+%{-- <INPUT type="checkbox" tabindex="4" name="groovy.servlet.output" value="raw"> Display Raw Output<br> --}%
+<INPUT type="checkbox" tabindex="5" name="groovy.servlet.lib" checked value="true"> Include lib<br>
+</td></tr><tr><td id="td_submit">
+<INPUT type="submit" value="Evaluate" tabindex="2"><br>
+</td></tr>
+<tr><td colspan="2">
+<iframe name="result" style="border:1px solid black; white-space:pre;" width="100%" height="100%"></iframe>
+</td></tr>
+</table>
 </form>
 
 </body>
-</html>
+<html>

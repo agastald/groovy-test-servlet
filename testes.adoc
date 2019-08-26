@@ -1,6 +1,7 @@
 .Para rodar
 ```bash
 git apply 0001-files-for_run-app.patch
+sdk u grails 2.5.6
 grails -reloading run-app
 ```
 
